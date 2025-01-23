@@ -432,7 +432,9 @@ Notifications.merge = async function (notifications) {
 			return cur;
 		}, []);
 
-		differentiators.forEach((differentiator) => {
+		differentiators.forEach(differentiatorsIterator);
+
+		function differentiatorsIterator(differentiator) {
 			function typeFromLength(items) {
 				if (items.length === 2) {
 					return 'dual';
@@ -491,7 +493,6 @@ Notifications.merge = async function (notifications) {
 					} else if (numUsers > 2) {
 						notifications[modifyIndex].bodyShort = `[[${mergeId}-${typeFromLength(usernames)}, ${usernames.slice(0, 2).join(', ')}, ${numUsers - 2}${titleEscaped}]]`;
 					}
-
 					notifications[modifyIndex].path = set[set.length - 1].path;
 				} break;
 
@@ -505,10 +506,9 @@ Notifications.merge = async function (notifications) {
 				if (!notifObj || !notifObj.mergeId) {
 					return true;
 				}
-
 				return !(notifObj.mergeId === (mergeId + (differentiator ? `|${differentiator}` : '')) && idx !== modifyIndex);
 			});
-		});
+		}
 
 		return notifications;
 	}
